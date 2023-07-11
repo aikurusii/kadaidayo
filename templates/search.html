@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+
+{% block css %}
+<link rel="stylesheet" href="{{url_for('static', filename='/css/search.css')}}"
+{% endblock %}
+
+{% block content %}
+<h1>検索</h1>
+<form action="{{url_for('sample_list')}}" method="get">
+    <input type="text" name="keyword">
+    <button type="submit">検索</button>
+</form>
+{% endblock %}
