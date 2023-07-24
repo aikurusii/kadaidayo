@@ -1,31 +1,28 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ログイン画面</title>
+    <title>図書登録画面</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            background-image: url('https://example.com/path/to/your/background-image.jpg');
-            background-size: cover;
-            background-position: center;
             padding: 20px;
         }
 
-        .login-form {
+        .register-form {
             max-width: 400px;
             margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: #f8f9fa;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
         }
 
-        .login-title {
+        .register-title {
             text-align: center;
             font-size: 24px;
             font-weight: bold;
@@ -36,12 +33,12 @@
             color: #333;
         }
 
-        .login-button {
+        .register-button {
             margin-top: 20px;
             text-align: center;
         }
 
-        .login-button button {
+        .register-button button {
             width: 100%;
             padding: 10px;
             font-size: 16px;
@@ -53,49 +50,46 @@
             transition: background-color 0.3s;
         }
 
-        .login-button button:hover {
+        .register-button button:hover {
             background-color: #0056b3;
-        }
-
-        .register-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #007bff;
-            font-weight: bold;
-            text-decoration: none;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <div class="login-form">
-            <h3 class="login-title">ログイン画面</h3>
+        <div class="register-form">
+            <h3 class="register-title">図書登録画面</h3>
+            {% if msg != null %}
+            <p style="color: red;">{{ msg }}</p>
+            {% endif %}
             {% if error != null %}
             <p style="color: red;">{{ error }}</p>
             {% endif %}
-            {% if msg != null %}
-            <p style="color: blue;">{{ msg }}</p>
-            {% endif %}
-            <form action="{{ url_for('login') }}" method="post">
+            <form action="{{ url_for('register_books') }}" method="post">
                 <div class="form-group">
-                    <label for="username">ユーザ名:</label>
-                    <input type="text" name="username" value="{{ data.user_name if data is defined else '' }}"
-                        class="form-control">
+                    <label for="title">図書名：</label>
+                    <input type="text" name="title" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label for="password">パスワード：</label>
-                    <input type="password" name="password" value="{{ data.password if data is defined else '' }}"
-                        class="form-control">
+                    <label for="author">著者：</label>
+                    <input type="text" name="author" class="form-control">
                 </div>
-                <div class="login-button">
-                    <button type="submit">ログイン</button>
+                <div class="form-group">
+                    <label for="publisher">出版社：</label>
+                    <input type="text" name="publisher" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="pages">ページ数：</label>
+                    <input type="text" name="pages" class="form-control">
+                </div>
+                <div class="register-button">
+                    <button type="submit">登録</button>
                 </div>
             </form>
-            <a href="{{ url_for('register_form') }}" class="register-link">新規登録</a>
         </div>
     </div>
+    <a href="{{ url_for("mypage") }}" class="btn btn-primary mb-3">Top</a>
     <!-- Bootstrap JavaScript -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>

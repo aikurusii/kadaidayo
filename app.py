@@ -1,6 +1,7 @@
 from flask import Flask, render_template,request,redirect, url_for, session
 import random,string
 import db
+from datetime import timedelta
 
 
 app = Flask(__name__)
@@ -25,7 +26,10 @@ def login():
     password=request.form.get('password')
     # ログイン判定
     if db.login(user_name, password):
-        return redirect(url_for('mypage'))
+        session["user"] = True  # session にキー：'user', バリュー:True を追加
+        session.permanent = True  # session の有効期限を有効化
+        app.permanent_session_lifetime = timedelta(minutes=10)  # session の有効期限を 5 分に設定
+        return redirect(url_for("mypage"))
     else:
         error='ユーザ名またはパスワードが違います。'
        # dictで返すことでフォームの入力量が増えても可読性が下がらない。
@@ -34,11 +38,20 @@ def login():
     
 @app.route('/mypage', methods=['GET'])
 def mypage():
-    return render_template('mypage.html')
+    if "user" in session:
+        return render_template("mypage.html")  # session があれば mypage.html を表示
+    else:
+          return redirect(url_for("index"))
     
+
+
 @app.route('/register')
 def register_form():
     return render_template('register.html')
+
+@app.route('/registerbook.html')
+def register_book():
+    return render_template('registerbook.html')
 
 @app.route('/register_exe', methods=['POST'])
 def register_exe():
@@ -71,15 +84,63 @@ def sample_list():
     return render_template('list.html', books=book_list)
 
 
-# @app.route('/register_exe', methods=['POST'])
-# def register_exe():
-#     title=request.form.get('title')
-#     author=request.form.get('author')
-#     publisher=request.form.get('publisher')
-#     pages=request.form.get('pages')
-#     db.insert_book(title, author, publisher, pages)
-#     book_list=db.select_all_books()
-#     return render_template('list.html', books=book_list)
+@app.route('/register_book', methods=['POST'])
+def register_books():
+    title=request.form.get('title')
+    author=request.form.get('author')
+    publisher=request.form.get('publisher')
+    pages=request.form.get('pages')
+    if title=="":
+        error="タイトル等が入力されていません"
+        return render_template("registerbook.html",error=error)
+    if author=="":
+        error="著者等が入力されていません"
+        return render_template("registerbook.html",error=error)
+    if publisher=="":
+        error="出版社等が入力されていません"
+        return render_template("registerbook.html",error=error)
+    if pages=="":
+        error="ページ数が入力されていません"
+        return render_template("registerbook.html",error=error)
+    
+    db.insert_book(title, author, publisher, pages)
+    # if count==1:
+    msg="登録が完了しました。"
+    return render_template('registerbook.html',msg=msg)
+    # else:
+    #     error="登録に失敗しました。"
+    #     return render_template("registerbook.html",error=error)
+    
+@app.route("/logout")
+def logout():
+    session.pop("user", None)  # session の破棄
+    return redirect(url_for("index"))
 
+@app.route("/list", methods=['POST']) 
+def delete():
+    id = request.form.get("id")
+    if id == "":
+        error = "idが入力されていません"
+        book_list = db.select_all_books()
+        return render_template("list.html", error=error, books=book_list)
+
+    db.deletebook(id)
+    book_list = db.select_all_books()
+    msg = "削除が完了しました。"
+    return render_template("list.html", msg=msg, books=book_list)
+
+@app.route("/search", methods=["POST"])
+def search():
+    title = request.form.get("title")
+    if title == "":
+        error = "タイトルが入力されていません"
+        book_list = db.select_all_books()
+        return render_template("list.html", error=error, books=book_list)
+
+    book_list = db.seach_book(title)
+    msg = "対象図書一覧です"
+    return render_template("list.html", msg=msg, books=book_list)
+    
+    
 if __name__ == "__main__":
     app.run(debug=True)

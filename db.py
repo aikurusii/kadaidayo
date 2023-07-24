@@ -9,7 +9,7 @@ def get_connection():
 def select_all_books():
     connection = get_connection()
     cursor = connection.cursor()
-    sql = "SELECT title, author, publisher, pages FROM books_sample"
+    sql = "SELECT * FROM books_sample"
     
     cursor.execute(sql)
     rows = cursor.fetchall()
@@ -23,6 +23,7 @@ def insert_book(title, author, publisher, pages):
     cursor=connection.cursor()
     sql='INSERT INTO books_sample VALUES (default, %s, %s, %s, %s)'
     cursor.execute(sql, (title, author, publisher, pages))
+    count = cursor.rowcount
     connection.commit()
     cursor.close()
     connection.close()
@@ -87,3 +88,23 @@ def login(user_name, password):
     cursor.close()
     connection.close()
   return flg
+
+def deletebook(id):
+    connection=get_connection()
+    cursor=connection.cursor()
+    sql="delete from books_sample where id=%s"
+    cursor.execute(sql, (id,))
+    connection.commit()
+    cursor.close()
+    connection.close()
+    
+def seach_book(title):
+    connection=get_connection()
+    cursor=connection.cursor()
+    sql="select*from books_sample where title like %s"
+    cursor.execute(sql, ("%"+title+"%",))
+    rows = cursor.fetchall()
+    
+    cursor.close()
+    connection.close()
+    return rows

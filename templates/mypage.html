@@ -1,11 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>マイページ</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+
+        .navbar {
+            background-color: #007bff;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .navbar a {
+            color: #fff;
+            margin-right: 10px;
+            text-decoration: none;
+        }
+
+        .navbar a:hover {
+            color: #f8f9fa;
+        }
+
+        .welcome-message {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .button-container {
+            text-align: center;
+        }
+
+        .button-container a {
+            margin-right: 10px;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>q</h1>
+    <div class="container">
+       
+        <h1 class="welcome-message">マイページ</h1>
+        
+        <div class="button-container">
+            <a href="{{ url_for("register_book") }}" class="btn btn-primary">図書新規登録</a>
+            <a href="{{ url_for("sample_list") }}" class="btn btn-primary">図書一覧</a>
+            <a href="{{ url_for("logout") }}" class="btn btn-danger">ログアウト</a>
+        </div>
+    </div>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

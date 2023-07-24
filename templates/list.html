@@ -1,30 +1,116 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block css %}
-<link rel="stylesheet" href="{{url_for('static', filename='/css/list.css')}}">
-{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>図書一覧</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
 
 
-{% block content %}
-  <h1>一覧</h1>
-  <table class="table table-striped">
-    <thead>
-        <tr>
-            <th>タイトル</th>
-            <th>著者</th>
-            <th>出版社</th>
-            <th>ページ数</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for book in books %}
-        <tr>
-            <td>{{ book[0] }}</td>
-            <td>{{ book[1] }}</td>
-            <td>{{ book[2] }}</td>
-            <td>{{ book[3] }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-  </table>
-{% endblock %}
+        .form-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group label {
+            margin-right: 5px;
+        }
+
+        .delete-form,
+        .search-form {
+            flex: 1;
+        }
+
+        .delete-form input,
+        .search-form input {
+            width: 100%;
+            max-width: 150px;
+            margin-right: 5px;
+        }
+
+        .delete-button,
+        .btn-primary {
+            max-width: 100px;
+        }
+
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>図書編集</h1>
+        <a href="{{ url_for("mypage") }}" class="btn btn-primary mb-3">Top</a>
+        <div class="d-flex align-items-center mb-3">
+            <form action="{{ url_for("delete") }}" method="post" class="delete-form">
+                <div class="form-group">
+                    <label for="id">図書削除:</label>
+                    <input type="text" name="id" value="{{ data.id if data is defined else "" }}" class="form-control"
+                        placeholder="IDを入力">
+                    <button type="submit" class="btn btn-danger delete-button">削除</button>
+                </div>
+            </form>
+
+            <form action="{{ url_for("search") }}" method="post" class="search-form">
+                <div class="form-group">
+                    <label for="title">図書検索:</label>
+                    <input type="text" name="title" value="{{ data.title if data is defined else "" }}"
+                        class="form-control" placeholder="タイトルを入力">
+                    <button type="submit" class="btn btn-primary">検索</button>
+                </div>
+            </form>
+        </div>
+
+        {% if error != null %}
+        <p style="color: red;">{{ error }}</p>
+        {% endif %}
+        {% if msg != null %}
+        <p style="color: blue;">{{ msg }}</p>
+        {% endif %}
+
+
+        <div class="table-container">
+            <h1>図書一覧</h1>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>タイトル</th>
+                        <th>著者</th>
+                        <th>出版社</th>
+                        <th>ページ数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in books %}
+                    <tr>
+                        <td>{{ book[0] }}</td>
+                        <td>{{ book[1] }}</td>
+                        <td>{{ book[2] }}</td>
+                        <td>{{ book[3] }}</td>
+                        <td>{{ book[4] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.9/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
