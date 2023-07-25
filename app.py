@@ -32,14 +32,13 @@ def login():
         return redirect(url_for("mypage"))
     else:
         error='ユーザ名またはパスワードが違います。'
-       # dictで返すことでフォームの入力量が増えても可読性が下がらない。
         input_data={'user_name':user_name, 'password':password}
         return render_template('index.html', error=error, data=input_data)
     
 @app.route('/mypage', methods=['GET'])
 def mypage():
     if "user" in session:
-        return render_template("mypage.html")  # session があれば mypage.html を表示
+        return render_template("mypage.html")  
     else:
           return redirect(url_for("index"))
     
@@ -58,7 +57,7 @@ def register_exe():
     user_name = request.form.get('username')
     password = request.form.get('password')
 
-    # バリデーションチェック
+
     if user_name == '':
         error = 'ユーザ名が未入力です'
         return render_template('register.html', error=error)
@@ -71,8 +70,8 @@ def register_exe():
 
     if count == 1:
         msg = '登録が完了しました。'
-        return redirect(url_for('index', msg=msg))  # Redirect で index()に Get アクセス
-        # return render_template('index.html', msg=msg)
+        return redirect(url_for('index', msg=msg))  
+    
     else:
         error = '登録に失敗しました。'
         return render_template('register.html', error=error)
@@ -104,16 +103,13 @@ def register_books():
         return render_template("registerbook.html",error=error)
     
     db.insert_book(title, author, publisher, pages)
-    # if count==1:
+
     msg="登録が完了しました。"
     return render_template('registerbook.html',msg=msg)
-    # else:
-    #     error="登録に失敗しました。"
-    #     return render_template("registerbook.html",error=error)
-    
+
 @app.route("/logout")
 def logout():
-    session.pop("user", None)  # session の破棄
+    session.pop("user", None) 
     return redirect(url_for("index"))
 
 @app.route("/list", methods=['POST']) 
