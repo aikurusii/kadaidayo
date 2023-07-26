@@ -79,12 +79,12 @@
             {% endif %}
             <form action="{{ url_for('login') }}" method="post">
                 <div class="form-group">
-                    <label for="username">ユーザ名:</label>
+                    <label for="username">ユーザ名</label>
                     <input type="text" name="username" value="{{ data.user_name if data is defined else '' }}"
                         class="form-control">
                 </div>
                 <div class="form-group">
-                    <label for="password">パスワード：</label>
+                    <label for="password">パスワード</label>
                     <input type="password" name="password" value="{{ data.password if data is defined else '' }}"
                         class="form-control">
                 </div>
